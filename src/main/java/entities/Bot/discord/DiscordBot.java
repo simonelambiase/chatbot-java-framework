@@ -63,11 +63,12 @@ public class DiscordBot extends BotAbstract {
         super.addCommand(commandName, commandString, commandDescription,a);
         if ( !isAlive() ) {
             if (a.getAction() instanceof EventListener) {
-                commands.add(new DiscordCommand(commandName, commandString, commandDescription, (EventListener) a.getAction()));
+                commands.add(new DiscordCommand(commandName, commandString, commandDescription, new BotAction((EventListener) a.getAction()));
             }
         }
         if ( isAlive() ) {
             if (a.getAction() instanceof EventListener) {
+                commands.add(new DiscordCommand(commandName, commandString, commandDescription, new BotAction((EventListener) a.getAction()));
                 jda.addEventListener(a.getAction());
             }
         }

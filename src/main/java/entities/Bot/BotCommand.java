@@ -1,27 +1,26 @@
-package entities.Bot.discord;
+package entities.Bot;
 
-
-import entities.Bot.BotAction;
-import entities.Bot.BotCommand;
 import net.dv8tion.jda.api.hooks.EventListener;
 
-public class DiscordCommand extends BotCommand {
+public abstract class BotCommand {
 
     private String commandName;
     private String commandString;
     private String commandDescription;
-    private BotAction botAction;
-    private EventListener action;
+    private BotAction action;
 
-    public DiscordCommand(String commandName, String commandString, String commandDescription) {
-        super(commandName, commandString, commandDescription);
+    public BotCommand(String commandName, String commandString, String commandDescription) {
+        this.commandName = commandName;
+        this.commandString = commandString;
+        this.commandDescription = commandDescription;
     }
 
-    public DiscordCommand(String commandName, String commandString, String commandDescription, BotAction action) {
-        super(commandName, commandString, commandDescription, action);
-        this.action = (EventListener) botAction.getAction();
+    public BotCommand(String commandName, String commandString, String commandDescription, BotAction action) {
+        this.commandName = commandName;
+        this.commandString = commandString;
+        this.commandDescription = commandDescription;
+        this.action = action;
     }
-
 
     public String getCommandName() {
         return commandName;
@@ -48,11 +47,10 @@ public class DiscordCommand extends BotCommand {
     }
 
     public BotAction getAction() {
-        return new BotAction(action);
+        return action;
     }
 
-    public void setAction(EventListener action) {
+    public void setAction(BotAction action) {
         this.action = action;
     }
-
 }
