@@ -11,7 +11,6 @@ public class DiscordCommand extends BotCommand {
     private String commandString;
     private String commandDescription;
     private BotAction botAction;
-    private EventListener action;
 
     public DiscordCommand(String commandName, String commandString, String commandDescription) {
         super(commandName, commandString, commandDescription);
@@ -19,40 +18,43 @@ public class DiscordCommand extends BotCommand {
 
     public DiscordCommand(String commandName, String commandString, String commandDescription, BotAction action) {
         super(commandName, commandString, commandDescription, action);
-        this.action = (EventListener) botAction.getAction();
     }
 
-
+    @Override
     public String getCommandName() {
         return commandName;
     }
 
+    @Override
     public void setCommandName(String commandName) {
         this.commandName = commandName;
     }
 
+    @Override
     public String getCommandString() {
         return commandString;
     }
 
+    @Override
     public void setCommandString(String commandString) {
         this.commandString = commandString;
     }
 
+    @Override
     public String getCommandDescription() {
         return commandDescription;
     }
 
+    @Override
     public void setCommandDescription(String commandDescription) {
         this.commandDescription = commandDescription;
     }
 
-    public BotAction getAction() {
-        return new BotAction(action);
+    public BotAction getBotAction() {
+        return botAction;
     }
 
-    public void setAction(EventListener action) {
-        this.action = action;
+    public void setBotAction(BotAction botAction) {
+        this.botAction = botAction;
     }
-
 }

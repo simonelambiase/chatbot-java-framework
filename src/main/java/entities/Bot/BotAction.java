@@ -25,4 +25,8 @@ public class BotAction {
         }
         return null;
     }
+
+    public EventListener getDiscordAction() {
+        return listener;
+    }
 }

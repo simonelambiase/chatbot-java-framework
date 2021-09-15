@@ -1,5 +1,6 @@
 package entities.Bot;
 
+import entities.Bot.discord.DiscordCommand;
 import enums.Platform;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public abstract class BotAbstract {
         // Overrided from the child classes
     }
 
-    public void addCommand ( String commandName, String commandString, String commandDescription, BotAction a ) {
+    public void addCommand ( BotCommand command ) {
         //
     }
 

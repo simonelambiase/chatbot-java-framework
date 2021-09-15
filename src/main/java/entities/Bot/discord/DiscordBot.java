@@ -2,6 +2,7 @@ package entities.Bot.discord;
 
 import entities.Bot.BotAbstract;
 import entities.Bot.BotAction;
+import entities.Bot.BotCommand;
 import enums.Platform;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -14,7 +15,7 @@ import java.util.List;
 public class DiscordBot extends BotAbstract {
 
     private JDA jda;
-    private List<DiscordCommand> commands = new ArrayList<>();
+    private List<BotCommand> commands = new ArrayList<>();
 
     public DiscordBot(String token, Platform platform) {
         super(token, platform);
@@ -30,7 +31,7 @@ public class DiscordBot extends BotAbstract {
 
     @Override
     public boolean stopBot() {
-        if ( isAlive() ) {
+        if (isAlive()) {
             jda.shutdown();
             setAlive(false);
             getBotThread().stop();
@@ -43,9 +44,9 @@ public class DiscordBot extends BotAbstract {
         Thread botThread = new Thread(() -> {
             try {
                 jda = JDABuilder.createDefault(getToken()).build();
-                if ( commands != null && commands.size() > 0 ) {
-                    for ( DiscordCommand c : commands ) {
-                        jda.addEventListener(c.getAction());
+                if (commands != null && commands.size() > 0) {
+                    for ( BotCommand c : commands) {
+                        jda.addEventListener(c.getAction().getDiscordAction());
                     }
                 }
                 setAlive(true);
@@ -59,19 +60,9 @@ public class DiscordBot extends BotAbstract {
     }
 
     @Override
-    public void addCommand(String commandName, String commandString, String commandDescription, BotAction a ) {
-        super.addCommand(commandName, commandString, commandDescription,a);
-        if ( !isAlive() ) {
-            if (a.getAction() instanceof EventListener) {
-                commands.add(new DiscordCommand(commandName, commandString, commandDescription, new BotAction((EventListener) a.getAction()));
-            }
-        }
-        if ( isAlive() ) {
-            if (a.getAction() instanceof EventListener) {
-                commands.add(new DiscordCommand(commandName, commandString, commandDescription, new BotAction((EventListener) a.getAction()));
-                jda.addEventListener(a.getAction());
-            }
-        }
+    public void addCommand( BotCommand command ) {
+        commands.add(command);
+        jda.addEventListener(command.getAction().getDiscordAction());
     }
 
     public JDA getJda() {
