@@ -11,6 +11,11 @@ public class DiscordCommand extends BotCommand {
     private String commandDescription;
     private BotAction botAction;
 
+    public DiscordCommand() {
+        //
+    }
+
+
     public DiscordCommand(String commandName, String commandString, String commandDescription) {
         super(commandName, commandString, commandDescription);
     }

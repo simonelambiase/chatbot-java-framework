@@ -9,6 +9,10 @@ public abstract class BotCommand {
     private String commandDescription;
     private BotAction action;
 
+    public BotCommand() {
+        //
+    }
+
     public BotCommand(String commandName, String commandString, String commandDescription) {
         this.commandName = commandName;
         this.commandString = commandString;

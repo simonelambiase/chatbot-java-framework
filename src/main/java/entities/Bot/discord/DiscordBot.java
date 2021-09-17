@@ -56,13 +56,13 @@ public class DiscordBot extends BotAbstract {
             e.printStackTrace();
         }
         if (commands != null && commands.size() > 0) {
-            for ( BotCommand c : commands) {
-                this.jda.addEventListener(c.getAction().getDiscordAction());
+               for ( BotCommand c : commands) {
+                discordJDA.addEventListener(c.getAction().getDiscordAction());
             }
         }
         if ( listeners != null && listeners.size() > 0) {
             for ( EventListener e : listeners ) {
-                this.jda.addEventListener(e);
+                discordJDA.addEventListener(e);
             }
         }
         setAlive(true);
