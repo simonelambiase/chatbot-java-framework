@@ -1,10 +1,6 @@
 package entities.Bot;
 
-import entities.Bot.discord.DiscordCommand;
 import enums.Platform;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Simone Lambiase
@@ -35,11 +31,16 @@ public abstract class BotAbstract {
         return false;
     }
 
-    public void buildBot() {
+    public Object buildBot() {
         // Overrided from the child classes
+        return null;
     }
 
     public void addCommand ( BotCommand command ) {
+        //
+    }
+
+    public void addAction ( BotAction a ) {
         //
     }
 

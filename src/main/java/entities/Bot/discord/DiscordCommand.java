@@ -3,7 +3,6 @@ package entities.Bot.discord;
 
 import entities.Bot.BotAction;
 import entities.Bot.BotCommand;
-import net.dv8tion.jda.api.hooks.EventListener;
 
 public class DiscordCommand extends BotCommand {
 
@@ -14,10 +13,6 @@ public class DiscordCommand extends BotCommand {
 
     public DiscordCommand(String commandName, String commandString, String commandDescription) {
         super(commandName, commandString, commandDescription);
-    }
-
-    public DiscordCommand(String commandName, String commandString, String commandDescription, BotAction action) {
-        super(commandName, commandString, commandDescription, action);
     }
 
     @Override

@@ -11,11 +11,22 @@ import net.dv8tion.jda.api.hooks.EventListener;
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+/**
+ *
+ * @author Simone Lambiase
+ *
+ * A concrete representation for the Bot Abstract class.
+ * It's a JDA ( Java Discord API ) wrapper.
+ *
+ */
 
 public class DiscordBot extends BotAbstract {
 
     private JDA jda;
     private List<BotCommand> commands = new ArrayList<>();
+    private List<EventListener> listeners = new ArrayList<>();
 
     public DiscordBot(String token, Platform platform) {
         super(token, platform);
@@ -23,46 +34,55 @@ public class DiscordBot extends BotAbstract {
 
     @Override
     public boolean startBot() {
-        if (!isAlive()) {
-            buildBot();
+        if ( this.jda == null ) {
+           this.jda = buildBot();
         }
         return isAlive();
     }
 
     @Override
     public boolean stopBot() {
-        if (isAlive()) {
-            jda.shutdown();
-            setAlive(false);
-            getBotThread().stop();
-        }
+        jda.shutdown();
+        setAlive(false);
         return isAlive();
     }
 
     @Override
-    public void buildBot() {
-        Thread botThread = new Thread(() -> {
-            try {
-                jda = JDABuilder.createDefault(getToken()).build();
-                if (commands != null && commands.size() > 0) {
-                    for ( BotCommand c : commands) {
-                        jda.addEventListener(c.getAction().getDiscordAction());
-                    }
-                }
-                setAlive(true);
-            } catch (LoginException e) {
-                e.printStackTrace();
+    public JDA buildBot() {
+        JDA discordJDA = null;
+        try {
+            discordJDA = JDABuilder.createDefault(getToken()).build();
+        } catch (LoginException e) {
+            e.printStackTrace();
+        }
+        if (commands != null && commands.size() > 0) {
+            for ( BotCommand c : commands) {
+                this.jda.addEventListener(c.getAction().getDiscordAction());
             }
-        });
-        botThread.setName("Discord " + getToken());
-        setBotThread(botThread);
-        getBotThread().start();
+        }
+        if ( listeners != null && listeners.size() > 0) {
+            for ( EventListener e : listeners ) {
+                this.jda.addEventListener(e);
+            }
+        }
+        setAlive(true);
+        return discordJDA;
     }
 
     @Override
     public void addCommand( BotCommand command ) {
         commands.add(command);
-        jda.addEventListener(command.getAction().getDiscordAction());
+        if ( this.jda != null ) {
+            jda.addEventListener(command.getAction().getDiscordAction());
+        }
+    }
+
+    @Override
+    public void addAction( BotAction a) {
+        listeners.add(a.getDiscordAction());
+        if ( this.jda != null ) {
+            jda.addEventListener(a);
+        }
     }
 
     public JDA getJda() {

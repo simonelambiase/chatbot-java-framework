@@ -1,13 +1,12 @@
 import entities.Bot.BotAbstract;
 import entities.Bot.BotAction;
-import entities.Bot.BotCommand;
-import entities.Bot.discord.DiscordCommand;
-import entities.Bot.discord.commands.ReplyCommand;
+import entities.Bot.telegram.TelegramAction;
+import entities.Bot.telegram.TelegramCommand;
 import enums.Platform;
-import net.dv8tion.jda.api.events.GenericEvent;
-import net.dv8tion.jda.api.hooks.EventListener;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.bots.AbsSender;
 import utils.LoggerUtils;
 
 public class Runner {
@@ -15,9 +14,5 @@ public class Runner {
     private static final Logger log = LoggerUtils.createLogger(Runner.class);
 
     public static void main(String[] args) {
-        BotAbstract bot = BotFactory.createBot("ODUyMTEyMjMyNTUyMDcxMTg4.YMCFWw.DUbxLONuNaNCGq5iluXlLeFz8T4",Platform.DISCORD);
-        bot.startBot();
-        BotCommand command = new ReplyCommand("","","","");
-        bot.addCommand(command);
     }
 }
