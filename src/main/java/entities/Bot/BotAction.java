@@ -11,6 +11,7 @@ public class BotAction {
     private DiscordAction dAction;
     private TelegramAction tAction;
 
+    public BotAction() {}
     public BotAction( DiscordAction listener ) {
         this.dAction = listener;
     }
@@ -26,6 +27,14 @@ public class BotAction {
             return tAction;
         }
         return null;
+    }
+
+    public void setDiscordAction(DiscordAction dAction) {
+        this.dAction = dAction;
+    }
+
+    public void setTelegramAction(TelegramAction tAction) {
+        this.tAction = tAction;
     }
 
     public EventListener getDiscordAction() {

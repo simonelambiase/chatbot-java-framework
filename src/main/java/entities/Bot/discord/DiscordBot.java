@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.hooks.EventListener;
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  *
@@ -28,8 +27,9 @@ public class DiscordBot extends BotAbstract {
     private List<BotCommand> commands = new ArrayList<>();
     private List<EventListener> listeners = new ArrayList<>();
 
-    public DiscordBot(String token, Platform platform) {
-        super(token, platform);
+    public DiscordBot(String token) {
+        super(token, Platform.DISCORD);
+        startBot();
     }
 
     @Override
@@ -93,4 +93,8 @@ public class DiscordBot extends BotAbstract {
         this.jda = jda;
     }
 
+    @Override
+    public String getBotName() {
+        return jda.getSelfUser().getName();
+    }
 }

@@ -53,6 +53,7 @@ public abstract class BotCommand {
     public BotAction getAction() {
         return action;
     }
+
     public void setAction(BotAction action) {
         this.action = action;
     }

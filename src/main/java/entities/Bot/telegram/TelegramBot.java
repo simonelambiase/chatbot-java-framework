@@ -3,32 +3,38 @@ package entities.Bot.telegram;
 import entities.Bot.BotAbstract;
 import entities.Bot.BotCommand;
 import enums.Platform;
-import org.telegram.telegrambots.ApiContextInitializer;
+import lombok.SneakyThrows;
+import org.slf4j.Logger;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import utils.LoggerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class TelegramBot extends BotAbstract {
 
+    private static final Logger log = LoggerUtils.createLogger(TelegramBot.class);
     private TelegramBotsApi telegramApi;
     private TelegramBaseBot baseBot = null;
     private List<BotCommand> commands = new ArrayList<>();
 
-    public TelegramBot(String token, Platform platform) {
-        super(token, platform);
-
+    public TelegramBot(String token,String username) {
+        super(token,Platform.TELEGRAM,username);
+        startBot();
     }
 
     @Override
     public boolean startBot() {
         if (baseBot == null) {
             this.baseBot = buildBot();
+            log.info("Starting Telegram Bot...");
+            setAlive(true);
         }
-        setAlive(true);
         return isAlive();
+
     }
 
     @Override
@@ -38,17 +44,22 @@ public class TelegramBot extends BotAbstract {
 
     @Override
     public TelegramBaseBot buildBot() {
-            TelegramBaseBot baseTelegramBot = null;
-            ApiContextInitializer.init();
-            telegramApi = new TelegramBotsApi();
-            baseTelegramBot = new TelegramBaseBot(getToken());
+        TelegramBaseBot baseTelegramBot = null;
+        TelegramBotsApi telegramApi = null;
+        try {
+            telegramApi = new TelegramBotsApi(DefaultBotSession.class);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+        baseTelegramBot = new TelegramBaseBot(super.getToken(),super.getBotName());
             try {
                 telegramApi.registerBot(baseTelegramBot);
-            } catch (TelegramApiRequestException e) {
+            } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
             if (commands.size() > 0) {
                 for (BotCommand c : commands) {
+                    log.info("Registering command with name " + c.getCommandName() + " and string " + c.getCommandString());
                     baseTelegramBot.register(c.getAction().getTelegramAction());
                 }
             }
@@ -57,10 +68,8 @@ public class TelegramBot extends BotAbstract {
 
     @Override
     public void addCommand(BotCommand command) {
-       commands.add(command);
-       if ( baseBot != null ) {
-           baseBot.register(command.getAction().getTelegramAction());
-       }
+        baseBot.register(command.getAction().getTelegramAction());
+        log.info("Registering command with name " + command.getCommandName() + " and string /" + command.getCommandString());
     }
 
     @Override
@@ -103,4 +112,8 @@ public class TelegramBot extends BotAbstract {
         super.setBotThread(botThread);
     }
 
+    @Override
+    public String getBotName() {
+        return baseBot.getBotUsername();
+    }
 }

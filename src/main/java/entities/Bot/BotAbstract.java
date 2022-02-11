@@ -13,12 +13,19 @@ public abstract class BotAbstract {
 
     private String token;
     private Platform platform;
+    private String username;
     private boolean alive = false;
     private Thread botThread;
 
     public BotAbstract(String token, Platform platform) {
         this.token = token;
         this.platform = platform;
+    }
+
+    public BotAbstract(String token, Platform platform, String username) {
+        this.token = token;
+        this.platform = platform;
+        this.username = username;
     }
 
     public boolean startBot() {
@@ -75,5 +82,10 @@ public abstract class BotAbstract {
     public void setBotThread(Thread botThread) {
         this.botThread = botThread;
     }
+
+    public String getBotName() {
+        return this.username;
+    }
+
 
 }

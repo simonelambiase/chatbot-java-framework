@@ -10,12 +10,13 @@ public class TelegramCommand extends BotCommand {
 
     private BotAction action;
 
-    public TelegramCommand(String commandName, String commandString, String commandDescription ) {
-        super(commandName, commandString, commandDescription );
+    public TelegramCommand() {
+
     }
 
-    public TelegramCommand(String commandName, String commandString, String commandDescription, BotAction action) {
-        super(commandName, commandString, commandDescription, action);
+
+    public TelegramCommand(String commandName, String commandString, String commandDescription ) {
+        super(commandName, commandString, commandDescription );
     }
 
     @Override
@@ -57,5 +58,10 @@ public class TelegramCommand extends BotCommand {
     public void setAction(BotAction action) {
         this.action = action;
         super.setAction(action);
+    }
+
+    public void setAction(TelegramAction action) {
+        this.action = new BotAction(action);
+        super.setAction(new BotAction(action));
     }
 }

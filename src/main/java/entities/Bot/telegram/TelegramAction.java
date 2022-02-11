@@ -1,23 +1,19 @@
 package entities.Bot.telegram;
 
+import entities.Bot.BotAction;
 import entities.Bot.BotCommand;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.bots.AbsSender;
 
-public abstract class TelegramAction implements IBotCommand {
-
-    private BotCommand command;
-
-    public TelegramAction( BotCommand command ) {
-        this.command = command;
-    }
+public interface TelegramAction extends IBotCommand {
 
     @Override
-    public String getCommandIdentifier() {
-        return command.getCommandName();
-    }
+    String getCommandIdentifier();
 
     @Override
-    public String getDescription() {
-        return command.getCommandDescription();
-    }
+    String getDescription();
+
+    @Override
+    void processMessage(AbsSender absSender, Message message, String[] strings);
 }
