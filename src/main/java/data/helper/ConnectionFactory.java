@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class ConnectionFactory {
 
-    public static Session openSQLiteSessionFactory() {
+    public static Session openSQLiteSession() {
         Configuration configuration = new Configuration();
         Properties settings = new Properties();
         settings.put(Environment.DRIVER, "org.sqlite.JDBC");
@@ -41,7 +41,7 @@ public class ConnectionFactory {
         return configuration.buildSessionFactory(serviceRegistry).openSession();
     }
 
-    public static Session openSQLiteSessionFactory( String fileName ) {
+    public static Session openSQLiteSession( String fileName ) {
         Configuration configuration = new Configuration();
         Properties settings = new Properties();
         settings.put(Environment.DRIVER, "org.sqlite.JDBC");
@@ -50,6 +50,38 @@ public class ConnectionFactory {
         settings.put(Environment.SHOW_SQL, "false");
         settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
         settings.put(Environment.HBM2DDL_AUTO, "update");
+        configuration.setProperties(settings);
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+        return configuration.buildSessionFactory(serviceRegistry).openSession();
+    }
+
+    public static Session openSQLiteSession (String fileName, Class classToMap ) {
+        Configuration configuration = new Configuration();
+        Properties settings = new Properties();
+        settings.put(Environment.DRIVER, "org.sqlite.JDBC");
+        settings.put(Environment.URL, fileName.contains(".sqlite") ? "jdbc:sqlite:" + fileName : "jdbc:sqlite" + fileName + ".sqlite");
+        settings.put(Environment.DIALECT, "com.enigmabridge.hibernate.dialect.SQLiteDialect");
+        settings.put(Environment.SHOW_SQL, "false");
+        settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+        settings.put(Environment.HBM2DDL_AUTO, "update");
+        configuration.addAnnotatedClass(classToMap);
+        configuration.setProperties(settings);
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+        return configuration.buildSessionFactory(serviceRegistry).openSession();
+    }
+
+    public static Session openSQLiteSession (String fileName, List<Class> classToMap ) {
+        Configuration configuration = new Configuration();
+        Properties settings = new Properties();
+        settings.put(Environment.DRIVER, "org.sqlite.JDBC");
+        settings.put(Environment.URL, fileName.contains(".sqlite") ? "jdbc:sqlite:" + fileName : "jdbc:sqlite" + fileName + ".sqlite");
+        settings.put(Environment.DIALECT, "com.enigmabridge.hibernate.dialect.SQLiteDialect");
+        settings.put(Environment.SHOW_SQL, "false");
+        settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+        settings.put(Environment.HBM2DDL_AUTO, "update");
+        for ( Class clazz : classToMap ) {
+            configuration.addAnnotatedClass(clazz);
+        }
         configuration.setProperties(settings);
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         return configuration.buildSessionFactory(serviceRegistry).openSession();
@@ -67,7 +99,6 @@ public class ConnectionFactory {
         settings.put(Environment.SHOW_SQL, "false");
         settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
         settings.put(Environment.HBM2DDL_AUTO, "update");
-        List<Package> packageWithAnnotation = Arrays.stream(Package.getPackages()).filter(c -> c.isAnnotationPresent(Entity.class)).collect(Collectors.toList());
         configuration.setProperties(settings);
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         return configuration.buildSessionFactory(serviceRegistry).openSession();
@@ -86,6 +117,62 @@ public class ConnectionFactory {
         settings.put(Environment.HBM2DDL_AUTO, "update");
         List<Package> packageWithAnnotation = Arrays.stream(Package.getPackages()).filter(c -> c.isAnnotationPresent(Entity.class)).collect(Collectors.toList());
         configuration.setProperties(settings);
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+        return configuration.buildSessionFactory(serviceRegistry).openSession();
+    }
+
+    public static Session openMySQLSession( String address, String database, String username, String password, Class classToMap ) {
+        Configuration configuration = new Configuration();
+        Properties settings = new Properties();
+        settings.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
+        settings.put(Environment.URL, "jdbc:mysql://" + address + ":3306" + "/" + database);
+        settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
+        settings.put(Environment.USER,username);
+        settings.put(Environment.PASS,password);
+        settings.put(Environment.SHOW_SQL, "false");
+        settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+        settings.put(Environment.HBM2DDL_AUTO, "update");
+        configuration.setProperties(settings);
+        configuration.addAnnotatedClass(classToMap);
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+        return configuration.buildSessionFactory(serviceRegistry).openSession();
+    }
+
+    public static Session openMySQLSession(String address, int port, String database, String username, String password, List<Class> classToMap ) {
+        Configuration configuration = new Configuration();
+        Properties settings = new Properties();
+        settings.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
+        settings.put(Environment.URL, "jdbc:mysql://" + address + ":" + port + "/" + database);
+        settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
+        settings.put(Environment.USER,username);
+        settings.put(Environment.PASS,password);
+        settings.put(Environment.SHOW_SQL, "false");
+        settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+        settings.put(Environment.HBM2DDL_AUTO, "update");
+        configuration.setProperties(settings);
+        for ( Class clazz : classToMap ) {
+            configuration.addAnnotatedClass(clazz);
+        }
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+        return configuration.buildSessionFactory(serviceRegistry).openSession();
+    }
+
+
+    public static Session openMySQLSession( String address, String database, String username, String password, List<Class> classToMap ) {
+        Configuration configuration = new Configuration();
+        Properties settings = new Properties();
+        settings.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
+        settings.put(Environment.URL, "jdbc:mysql://" + address + ":3306" + "/" + database);
+        settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
+        settings.put(Environment.USER,username);
+        settings.put(Environment.PASS,password);
+        settings.put(Environment.SHOW_SQL, "false");
+        settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+        settings.put(Environment.HBM2DDL_AUTO, "update");
+        configuration.setProperties(settings);
+        for ( Class clazz : classToMap ) {
+            configuration.addAnnotatedClass(clazz);
+        }
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         return configuration.buildSessionFactory(serviceRegistry).openSession();
     }
