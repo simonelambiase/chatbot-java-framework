@@ -55,7 +55,7 @@ public class DataManagerMySQL implements DataManager {
         annotatedClass.add(obj.getClass());
         annotatedClass.addAll(AnnotationHelper.findAnnotatedClass(obj));
         session = ConnectionFactory.openMySQLSession(address, port != 0 ? port : 3306, database, username, password, annotatedClass);
-        session.saveOrUpdate(obj);
+        session.persist(obj);
         session.getTransaction().commit();
         return false;
     }

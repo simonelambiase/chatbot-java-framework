@@ -50,11 +50,7 @@ public class DiscordBot extends BotAbstract {
     @Override
     public JDA buildBot() {
         JDA discordJDA = null;
-        try {
-            discordJDA = JDABuilder.createDefault(getToken()).build();
-        } catch (LoginException e) {
-            e.printStackTrace();
-        }
+        discordJDA = JDABuilder.createDefault(getToken()).build();
         if (commands != null && commands.size() > 0) {
                for ( BotCommand c : commands) {
                 discordJDA.addEventListener(c.getAction().getDiscordAction());

@@ -2,7 +2,6 @@ package entities;
 
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
-import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,7 +15,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
  */
 public interface Action extends EventListener, IBotCommand {
     @Override
-    void onEvent(@NotNull GenericEvent genericEvent);
+    void onEvent(GenericEvent genericEvent);
 
     @Override
     String getCommandIdentifier();

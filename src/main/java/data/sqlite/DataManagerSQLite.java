@@ -36,7 +36,7 @@ public class DataManagerSQLite implements DataManager {
         annotatedClass.add(obj.getClass());
         annotatedClass.addAll(AnnotationHelper.findAnnotatedClass(obj));
         session = ConnectionFactory.openSQLiteSession(fileName != null ? fileName : "data.sqlite", annotatedClass);
-        session.save(obj);
+        session.persist(obj);
         session.getTransaction().commit();
         return true;
     }
