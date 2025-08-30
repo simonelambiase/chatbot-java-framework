@@ -34,10 +34,12 @@ public class ReflectionHelper {
     public static List<Class> getAnnotatedClass ( Class entityClass ) {
         List<Class> classes = new ArrayList<>();
         for ( Package p : Package.getPackages() ) {
-            Set<Class> classesPkg = findAllClassesUsingClassLoader(p.getName());
-            for ( Class c : classesPkg ) {
-                if ( c.getAnnotations().getClass().equals(entityClass)) {
-                    classes.add(c);
+            if ( !p.getName().startsWith("java") && !p.getName().startsWith("sun") && !p.getName().startsWith("jdk")) {
+                Set<Class> classesPkg = findAllClassesUsingClassLoader(p.getName());
+                for (Class c : classesPkg) {
+                    if (c.getAnnotations().getClass().equals(entityClass)) {
+                        classes.add(c);
+                    }
                 }
             }
         }
